@@ -1,0 +1,196 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  --plum:#3a1746;      /* ink */
+  --guava:#ff5c8a;     /* hero pink */
+  --mango:#ffb23e;     /* warm pop */
+  --lilac:#b9a4ff;     /* cool pop */
+  --mint:#7fdcc0;      /* tiny accent */
+  --blush:#fff0f3;     /* label base */
+  --cream:#fff9f2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:2320px;height:800px;overflow:hidden;background:var(--blush)}
+body{font-family:'DM Sans',sans-serif;color:var(--plum);position:relative}
+.wrap{position:absolute;inset:0;display:grid;grid-template-columns:700px 920px 700px}
+
+/* ---------- background art across the whole wrap ---------- */
+.bg{position:absolute;inset:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%}
+.b1{width:1100px;height:1100px;left:610px;top:-260px;background:radial-gradient(circle at 40% 40%,#ffd1de 0%,#ffc2d3 40%,rgba(255,194,211,0) 70%)}
+.b2{width:520px;height:520px;left:1430px;top:430px;background:radial-gradient(circle,#ffe0a8 0%,rgba(255,224,168,0) 70%)}
+.b3{width:560px;height:560px;left:520px;top:420px;background:radial-gradient(circle,#ddd2ff 0%,rgba(221,210,255,0) 70%)}
+.stripe{position:absolute;left:0;right:0;height:22px}
+.st1{top:0;background:linear-gradient(90deg,var(--lilac),var(--guava) 35%,var(--mango) 65%,var(--mint))}
+.st2{bottom:0;background:linear-gradient(90deg,var(--mint),var(--mango) 35%,var(--guava) 65%,var(--lilac))}
+.dots{position:absolute;inset:0}
+
+/* ---------- front panel ---------- */
+.front{position:relative;display:flex;flex-direction:column;align-items:center;padding:58px 60px 46px;text-align:center}
+.wordmark{font-family:'Bricolage Grotesque';font-weight:800;font-size:112px;letter-spacing:-5px;line-height:.9;color:var(--plum);display:flex;align-items:center}
+.wordmark .eight{display:inline-block;margin-left:4px;position:relative;width:76px;height:118px}
+.tag{font-family:'DM Mono';font-size:17px;letter-spacing:5px;text-transform:uppercase;margin-top:14px;color:#7a4a86}
+.hero{position:relative;margin-top:30px;width:780px;height:300px}
+.product{font-family:'Bricolage Grotesque';font-weight:800;font-size:156px;line-height:.84;letter-spacing:-6px;color:var(--guava);
+  text-shadow:6px 6px 0 var(--plum)}
+.product span{display:block}
+.product .l2{color:var(--mango);margin-left:70px}
+.sticker{position:absolute;right:4px;top:-4px;width:178px;height:178px;border-radius:50%;background:var(--plum);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(12deg);
+  box-shadow:0 0 0 6px var(--blush),0 0 0 10px var(--plum)}
+.sticker b{font-family:'Bricolage Grotesque';font-size:72px;line-height:.85;font-weight:800;color:var(--mango)}
+.sticker small{font-size:17px;font-weight:700;letter-spacing:1px;line-height:1.1;margin-top:4px}
+.sub{font-family:'Bricolage Grotesque';font-weight:700;font-size:40px;letter-spacing:-.5px;margin-top:8px}
+.sub i{font-style:normal;color:var(--guava)}
+.chips{display:flex;gap:14px;margin-top:22px}
+.chip{border:3px solid var(--plum);border-radius:999px;padding:9px 22px 10px;font-weight:700;font-size:21px;background:#fff;white-space:nowrap}
+.chip.p{background:var(--lilac)}
+.chip.m{background:var(--mango)}
+.foot{margin-top:auto;display:flex;align-items:baseline;gap:22px;font-weight:900;font-size:24px;letter-spacing:2.5px;text-transform:uppercase}
+.foot .sep{width:9px;height:9px;border-radius:50%;background:var(--guava);display:inline-block;transform:translateY(-4px)}
+
+/* ---------- side panels ---------- */
+.side{position:relative;padding:54px 56px 44px}
+.left{padding-right:46px}
+.right{padding-left:50px}
+.panelcard{background:#fff;border-radius:22px;box-shadow:0 0 0 3px var(--plum)}
+
+/* Supplement Facts: standard black-on-white panel */
+.facts{font-family:'DM Sans';color:#140a18;padding:16px 20px 14px;width:100%}
+.facts h3{font-weight:900;font-size:52px;letter-spacing:-1.6px;line-height:1;border-bottom:2px solid #140a18;padding-bottom:4px}
+.facts .row{display:flex;justify-content:space-between;font-size:17px;line-height:1.3}
+.facts .serv{padding:5px 0 6px;border-bottom:10px solid #140a18}
+.facts table{width:100%;border-collapse:collapse;font-size:16.5px;line-height:1.22}
+.facts th{font-weight:700;text-align:right;font-size:14.5px;padding:3px 0;border-bottom:4px solid #140a18}
+.facts th:first-child{text-align:left}
+.facts td{padding:5px 0;border-bottom:1.5px solid #140a18;vertical-align:top}
+.facts td.amt{text-align:right;white-space:nowrap;padding-left:10px;font-weight:700}
+.facts td.dv{text-align:right;width:46px;font-weight:700}
+.facts .strains{font-size:13.6px;line-height:1.3;font-weight:400;margin-top:3px;color:#2a1730}
+.facts tr.last td{border-bottom:8px solid #140a18}
+.facts .note{font-size:13.6px;line-height:1.35;margin-top:7px}
+.other{font-size:15.5px;line-height:1.4;margin-top:16px}
+.other b{font-weight:900;letter-spacing:.5px}
+
+/* right panel */
+.right h4{font-family:'Bricolage Grotesque';font-weight:800;font-size:30px;letter-spacing:-.5px;margin-bottom:4px}
+.right p{font-size:16.5px;line-height:1.42}
+.right .blk{margin-bottom:14px}
+.badges{display:grid;grid-template-columns:repeat(4,104px);gap:18px;margin:8px 0 20px}
+.badge{aspect-ratio:1;border-radius:50%;border:3px solid var(--plum);display:flex;align-items:center;justify-content:center;text-align:center;
+  font-weight:900;font-size:14.5px;line-height:1.05;letter-spacing:.6px;text-transform:uppercase;background:#fff}
+.badge:nth-child(1){background:#e6f8f1}.badge:nth-child(2){background:#fff1d6}.badge:nth-child(3){background:#efe9ff}.badge:nth-child(4){background:#ffe3ec}
+.fda{border:2.5px solid var(--plum);border-radius:14px;padding:10px 14px;font-size:14.5px;line-height:1.38;font-weight:500;background:#fff;margin-top:4px}
+.bottomrow{position:absolute;left:50px;right:56px;bottom:44px;display:flex;align-items:flex-end;gap:22px}
+.barcode{background:#fff;padding:10px 12px 6px;border-radius:8px;box-shadow:0 0 0 2px var(--plum)}
+.barcode .num{font-family:'DM Mono';font-size:13px;letter-spacing:2.5px;text-align:center;margin-top:3px;color:#140a18}
+.dist{font-size:14px;line-height:1.38}
+.dist b{font-weight:900}
+.lot{font-family:'DM Mono';font-size:13px;letter-spacing:1px;margin-top:6px;color:#6b4775}
+.hello{position:absolute;top:56px;right:56px;font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;color:var(--guava);transform:rotate(6deg)}
+</style></head>
+<body>
+<div class="bg">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <svg class="dots" width="2320" height="800" aria-hidden="true" id="dots"></svg>
+  <div class="stripe st1"></div><div class="stripe st2"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- LEFT: Supplement Facts -->
+  <section class="side left">
+    <div class="panelcard facts">
+      <h3>Supplement Facts</h3>
+      <div class="serv">
+        <div class="row"><b>Serving Size</b><b>1 Vegan Capsule</b></div>
+        <div class="row"><b>Servings Per Container</b><b>30</b></div>
+      </div>
+      <table>
+        <tr><th></th><th>Amount Per Serving</th><th>%DV</th></tr>
+        <tr><td><b>Formul8 Probiotic Blend</b>
+          <div class="strains">Lactobacillus acidophilus, Bifidobacterium lactis, Lactobacillus rhamnosus, Lactobacillus plantarum, Bifidobacterium longum, Lactobacillus paracasei, Lactobacillus reuteri, Bifidobacterium breve</div></td>
+          <td class="amt">50 Billion CFU*<br><span style="font-weight:400">(250 mg)</span></td><td class="dv">††</td></tr>
+        <tr><td><b>Organic Inulin</b> (from agave)<br><span class="strains">prebiotic fiber</span></td><td class="amt">150 mg</td><td class="dv">††</td></tr>
+        <tr class="last"><td><b>Ginger Root Extract</b><br><span class="strains">(Zingiber officinale) (root)</span></td><td class="amt">50 mg</td><td class="dv">††</td></tr>
+      </table>
+      <div class="note">*At time of manufacture.<br>††Daily Value (DV) not established.</div>
+    </div>
+    <p class="other"><b>OTHER INGREDIENTS:</b> Hypromellose (vegetable capsule), microcrystalline cellulose, rice bran.</p>
+    <p class="other" style="margin-top:8px"><b>CONTAINS NO:</b> dairy, gluten, soy, nuts, sugar, artificial colors or preservatives.</p>
+  </section>
+
+  <!-- FRONT -->
+  <section class="front">
+    <div class="wordmark">formul<span class="eight">
+      <svg width="76" height="118" viewBox="0 0 76 118" aria-hidden="true">
+        <defs><linearGradient id="g8" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#ffb23e"/></linearGradient></defs>
+        <circle cx="38" cy="34" r="22" fill="none" stroke="url(#g8)" stroke-width="17"/>
+        <circle cx="38" cy="82" r="27" fill="none" stroke="url(#g8)" stroke-width="17"/>
+        <circle cx="31" cy="27" r="3.5" fill="#fff" opacity=".85"/>
+      </svg></span></div>
+    <div class="tag">Gut love, daily</div>
+
+    <div class="hero">
+      <div class="product"><span>GUT</span><span class="l2">GLOW</span></div>
+      <div class="sticker"><b>50B</b><small>CFU<br>8 STRAINS</small></div>
+    </div>
+
+    <div class="sub">Daily Probiotic <i>+</i> Prebiotic</div>
+    <div class="chips">
+      <div class="chip p">Eases occasional bloating†</div>
+      <div class="chip m">Happy digestion†</div>
+      <div class="chip">Shelf stable</div>
+    </div>
+    <div class="foot">Dietary Supplement <span class="sep"></span> 30 Vegan Capsules</div>
+  </section>
+
+  <!-- RIGHT: directions, warnings, legal -->
+  <section class="side right">
+    <div class="hello">hi gorgeous gut ♡</div>
+    <div class="blk"><h4>How to use</h4>
+      <p>Take 1 capsule daily with water, with or without food. Best taken at the same time each day. No fridge needed.</p></div>
+    <div class="blk"><h4>Good to know</h4>
+      <p>If you are pregnant, nursing, taking medication, or have a medical condition, check with your healthcare provider before use. Keep out of reach of children. Store in a cool, dry place. Do not use if the safety seal under the cap is broken or missing.</p></div>
+    <div class="badges">
+      <div class="badge">Vegan</div><div class="badge">Gluten<br>Free</div><div class="badge">Non<br>GMO</div><div class="badge">Sugar<br>Free</div>
+    </div>
+    <div class="fda">†These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</div>
+
+    <div class="bottomrow">
+      <div class="barcode">
+        <svg id="upc" width="196" height="74" aria-hidden="true"></svg>
+        <div class="num">8 50012 34568 8</div>
+      </div>
+      <div>
+        <div class="dist"><b>Distributed by Formul8 Nutrition</b><br>formul8nutrition.com<br>@formul8nutrition</div>
+        <div class="lot">LOT ______ &nbsp;EXP ______</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// whisper-level "flora" bubbles, seeded so every render is identical
+function rng(s){s>>>=0;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296}
+const r=rng(8), svg=document.getElementById('dots'), cols=['#ff5c8a','#ffb23e','#b9a4ff','#7fdcc0'];
+let h='';
+for(let i=0;i<70;i++){
+  const x=r()*2320,y=40+r()*720,rad=3+r()*9,c=cols[i%4];
+  // keep the Supplement Facts card and text areas clean
+  if(x>40&&x<670&&y>40&&y<760)continue;
+  if(x>1640)continue;
+  if(x>680&&x<1640&&y>420)continue;
+  if(x>760&&x<1560&&y>40&&y<210)continue;
+  h+=`<circle cx="${x}" cy="${y}" r="${rad}" fill="${r()<.5?c:'none'}" stroke="${c}" stroke-width="3" opacity=".55"/>`;
+}
+svg.innerHTML=h;
+// a generic, non-scannable placeholder barcode
+const u=document.getElementById('upc'), rr=rng(31);let x=4,b='';
+while(x<190){const w=1+Math.floor(rr()*3);if(rr()<.55)b+=`<rect x="${x}" y="0" width="${w}" height="${(x<14||x>180||Math.abs(x-97)<4)?74:66}" fill="#140a18"/>`;x+=w+1}
+u.innerHTML=b;
+</script>
+</body></html>

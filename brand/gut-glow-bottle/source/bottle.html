@@ -1,0 +1,128 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;overflow:hidden;background:#ffe4ec}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script>window.DONE=false</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const q = new URLSearchParams(location.search);
+const ROT = parseFloat(q.get('rot') || '0');        // bottle spin, radians
+const CAPS = q.get('caps') !== '0';                   // loose capsules on the floor
+const CAMX = parseFloat(q.get('camx') || '0');
+const W = innerWidth, H = innerHeight;
+const BG = new THREE.Color(q.get('bg') || '#ffe4ec');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 0.95;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = BG;
+scene.fog = new THREE.Fog(BG, 420, 900);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.03).texture;
+scene.environmentIntensity = 0.3;
+
+const camera = new THREE.PerspectiveCamera(24, W / H, 1, 3000);
+camera.position.set(CAMX, 115, 400);
+camera.lookAt(CAMX * 0.12, 53, 0);
+
+// ---------- lights ----------
+const key = new THREE.DirectionalLight(0xfff4ee, 3.3);
+key.position.set(-230, 200, 110);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { left: -140, right: 140, top: 140, bottom: -140, near: 50, far: 700 });
+key.shadow.radius = 6; key.shadow.bias = -0.0006; key.shadow.normalBias = 0.4;
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xe9e2ff, 0.12); fill.position.set(240, 80, 140); scene.add(fill);
+const rim = new THREE.DirectionalLight(0xffffff, 2.2); rim.position.set(200, 140, -220); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xffc9d6, 0.12));
+
+// ---------- floor + soft contact shadow ----------
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000),
+  new THREE.MeshStandardMaterial({ color: BG, roughness: 0.95 }));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+function radialTex(inner, outer) {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  gr.addColorStop(0, inner); gr.addColorStop(1, outer);
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(c);
+}
+const ao = new THREE.Mesh(new THREE.PlaneGeometry(86, 86),
+  new THREE.MeshBasicMaterial({ map: radialTex('rgba(70,20,60,0.55)', 'rgba(70,20,60,0)'), transparent: true, depthWrite: false }));
+ao.rotation.x = -Math.PI / 2; ao.position.y = 0.05; scene.add(ao);
+
+// ---------- bottle (150cc wide-mouth packer, units in mm) ----------
+const R = 29;
+const bottle = new THREE.Group(); scene.add(bottle);
+const prof = [[0, 0.8], [22, 0.5], [26.8, 0.9], [28.6, 2.2], [29, 4], [29, 76], [28.7, 79.5], [27.6, 82.6], [25.6, 85.2], [23.4, 87], [22.2, 88.2], [22, 89.5], [22, 96]]
+  .map(([r, y]) => new THREE.Vector2(r, y));
+const bodyMat = new THREE.MeshPhysicalMaterial({ color: 0xc8b6ff, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.06, sheen: 0.3, sheenColor: 0xffffff });
+const body = new THREE.Mesh(new THREE.LatheGeometry(prof, 160), bodyMat);
+body.castShadow = true; body.receiveShadow = true; bottle.add(body);
+
+// label: one full wrap, front panel (u = 0.5) facing the camera
+const tex = await new THREE.TextureLoader().loadAsync('../label-flat-print.png');
+tex.colorSpace = THREE.SRGBColorSpace;
+tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+const LH = 2 * Math.PI * (R + 0.25) * (800 / 2320);
+const label = new THREE.Mesh(
+  new THREE.CylinderGeometry(R + 0.25, R + 0.25, LH, 256, 1, true, Math.PI, Math.PI * 2),
+  new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.38, clearcoat: 0.55, clearcoatRoughness: 0.22 }));
+label.position.y = 11.5 + LH / 2; label.castShadow = true; bottle.add(label);
+
+// cap: lathe profile with a rounded top edge, ridged grip band displaced in place
+const capProf = [[0, 108.6], [20, 108.6], [23.2, 108.2], [24.6, 107], [25.2, 105], [25.2, 104.6], [25.2, 104.2], [25.2, 90.6], [25.2, 90.2], [25.2, 89.4], [24.6, 88.4], [22.4, 88.2]]
+  .reverse().map(([r, y]) => new THREE.Vector2(r, y));
+const capGeo = new THREE.LatheGeometry(capProf.flatMap((p, i, arr) => i > 3 && i < 6 ? [p] : [p]), 960);
+const pos = capGeo.attributes.position, v = new THREE.Vector3();
+for (let i = 0; i < pos.count; i++) {
+  v.fromBufferAttribute(pos, i);
+  if (v.y > 90.6 && v.y < 104.2) {
+    const a = Math.atan2(v.x, v.z), r = Math.hypot(v.x, v.z);
+    const k = r + 0.75 * Math.abs(Math.sin(a * 80));
+    v.x *= k / r; v.z *= k / r; pos.setXYZ(i, v.x, v.y, v.z);
+  }
+}
+// split the ridge band from the smooth band so ridges read crisply
+capGeo.computeVertexNormals();
+const cap = new THREE.Mesh(capGeo, new THREE.MeshPhysicalMaterial({ color: 0xff5c8a, roughness: 0.32, clearcoat: 0.6, clearcoatRoughness: 0.18 }));
+cap.castShadow = true; bottle.add(cap);
+// embossed ring on cap top
+const ring = new THREE.Mesh(new THREE.TorusGeometry(15, 0.55, 16, 160),
+  new THREE.MeshPhysicalMaterial({ color: 0xff7aa0, roughness: 0.3, clearcoat: 0.6 }));
+ring.rotation.x = Math.PI / 2; ring.position.y = 108.6; bottle.add(ring);
+
+bottle.rotation.y = ROT;
+
+// ---------- loose capsules ----------
+if (CAPS) {
+  const capsMat = new THREE.MeshPhysicalMaterial({ color: 0xf6eee4, roughness: 0.28, clearcoat: 0.8, clearcoatRoughness: 0.1, sheen: 0.6, sheenColor: 0xfff4e8, transmission: 0.12, thickness: 2 });
+  const g = new THREE.CapsuleGeometry(3.8, 14, 12, 40);
+  [[50, 30, 1.15], [64, 14, 0.35], [40, 50, 2.3]].forEach(([x, z, r]) => {
+    const m = new THREE.Mesh(g, capsMat);
+    m.rotation.set(0, r, Math.PI / 2, 'YXZ');
+    m.position.set(x, 3.8, z); m.castShadow = true; m.receiveShadow = true; scene.add(m);
+    // seam line where the two halves meet
+    const s = new THREE.Mesh(new THREE.TorusGeometry(3.86, 0.18, 8, 48), new THREE.MeshStandardMaterial({ color: 0xe6dccf, roughness: 0.4 }));
+    s.position.copy(m.position); s.rotation.set(0, r, 0, 'YXZ'); s.rotateY(Math.PI / 2); s.translateZ(2.5); scene.add(s);
+    const ao2 = new THREE.Mesh(new THREE.PlaneGeometry(30, 14), new THREE.MeshBasicMaterial({ map: radialTex('rgba(70,20,60,0.4)', 'rgba(70,20,60,0)'), transparent: true, depthWrite: false }));
+    ao2.rotation.set(-Math.PI / 2, 0, r - Math.PI / 2); ao2.position.set(x, 0.06, z); scene.add(ao2);
+  });
+}
+
+renderer.render(scene, camera);
+window.DONE = true;
+</script>
+</body></html>
