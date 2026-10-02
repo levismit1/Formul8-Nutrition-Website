@@ -14,13 +14,15 @@ Host to allow in the cloud environment's Network access: d8j0ntlcm91z4.cloudfron
 | Step 2, stir (2048x1360) | bfd8517a-3661-4c0a-befd-a18ad85371b0 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_200431_bfd8517a-3661-4c0a-befd-a18ad85371b0.png |
 | Step 3, sip (2048x1360) | 08ea579a-6902-486b-b812-a11718382e41 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_200430_08ea579a-6902-486b-b812-a11718382e41.png |
 
-Credits left on the account: 86.
+Credits left on the account: 77.
 
 ## Status (updated)
 
 DONE: all five files downloaded (network host allowed), inspected, processed. hero-scrub.mp4 (5.1 MB, -g 8, crf 26), hero-poster.jpg, hero-ending.jpg and the three step stills are in formul8/assets/. VIDEO_BYTES is set. Worst-frame legibility audit passes on every band at 1024, 1280, 1440 and 1920 wide (worst 4.78:1) and on the static phone hero (worst 5.7:1). Flick test, phone, tablet rotation, reduced motion (live both ways), video-missing and form tests all pass on the real assets. Copy gate passes.
 
-OPEN: (1) the hero ending lands on a brown, dried-looking leaf, not the fresh green glossy leaf in the plan; owner decides keep or re-roll (9 credits on Kling pro, 86 credits left). Phones see this frame as their whole hero. (2) Owner sends one real test signup after launch. (3) Legal read of the health sentences. (4) Hosting only when the owner says ready.
+OPEN: (1) Owner sends one real test signup after launch (Formspree may ask to confirm the first submission). (2) Legal read of the health sentences. (3) Hosting only when the owner says ready.
+
+HERO VIDEO: the owner chose the second take (Kling pro job 48b56484-a49a-49f7-9202-afef6cbcf41b, fresh green leaf ending, 9 credits, https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_205718_48b56484-a49a-49f7-9202-afef6cbcf41b.mp4). It is live in formul8/assets (4.6 MB). The first take (golden-brown leaf ending) is kept in git history at commit 6fa0e79 and as review/hero/raw-v1.mp4 locally. The legibility audit passes on the second take at 1024, 1280, 1440 and 1920 wide (worst 5.09:1) and on the static phone hero (worst 5.82:1).
 
 ## Original next steps (all done except the open items above)
 

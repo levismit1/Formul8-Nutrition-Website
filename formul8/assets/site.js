@@ -7,7 +7,7 @@
 ------------------------------------------------------------------ */
 const CONFIG = {
   VIDEO_URL: 'assets/hero-scrub.mp4',
-  VIDEO_BYTES: 5131741,                  // real byte size of hero-scrub.mp4, the fallback when Content-Length is missing
+  VIDEO_BYTES: 4605894,                  // real byte size of hero-scrub.mp4, the fallback when Content-Length is missing
   POSTER_URL: 'assets/hero-poster.jpg'
 };
 
