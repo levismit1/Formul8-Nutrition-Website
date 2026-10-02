@@ -16,7 +16,13 @@ Host to allow in the cloud environment's Network access: d8j0ntlcm91z4.cloudfron
 
 Credits left on the account: 86.
 
-## Next steps once the files download
+## Status (updated)
+
+DONE: all five files downloaded (network host allowed), inspected, processed. hero-scrub.mp4 (5.1 MB, -g 8, crf 26), hero-poster.jpg, hero-ending.jpg and the three step stills are in formul8/assets/. VIDEO_BYTES is set. Worst-frame legibility audit passes on every band at 1024, 1280, 1440 and 1920 wide (worst 4.78:1) and on the static phone hero (worst 5.7:1). Flick test, phone, tablet rotation, reduced motion (live both ways), video-missing and form tests all pass on the real assets. Copy gate passes.
+
+OPEN: (1) the hero ending lands on a brown, dried-looking leaf, not the fresh green glossy leaf in the plan; owner decides keep or re-roll (9 credits on Kling pro, 86 credits left). Phones see this frame as their whole hero. (2) Owner sends one real test signup after launch. (3) Legal read of the health sentences. (4) Hosting only when the owner says ready.
+
+## Original next steps (all done except the open items above)
 
 1. Save raws OUTSIDE formul8/ (review/hero/ and review/stills/).
 2. Scrub encode per 10k-websites/references/ffmpeg-recipes.md (-g 8). Poster = first frame, ending = last frame.

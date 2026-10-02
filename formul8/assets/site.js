@@ -7,7 +7,7 @@
 ------------------------------------------------------------------ */
 const CONFIG = {
   VIDEO_URL: 'assets/hero-scrub.mp4',
-  VIDEO_BYTES: 0,                      // real byte size of hero-scrub.mp4, the fallback when Content-Length is missing
+  VIDEO_BYTES: 5131741,                  // real byte size of hero-scrub.mp4, the fallback when Content-Length is missing
   POSTER_URL: 'assets/hero-poster.jpg'
 };
 
@@ -59,7 +59,7 @@ function splitWords(el) {
   el.textContent = '';
   el.append(sr, vis);
 }
-$$('.band .line').forEach(el => { if (el.dataset.fx !== 'depth') splitWords(el); });
+$$('.band .line').forEach(el => splitWords(el));
 
 /* ------------------------------------------------------------------
    The hero: a scroll-scrubbed video, then the page settles
