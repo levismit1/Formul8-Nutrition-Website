@@ -157,3 +157,11 @@ Every viewer-facing line above ships verbatim. The built page must pass the Phas
 - The closing 8 sits beside the waitlist card (not behind it) and grows the logo's leaf once drawn.
 - Section D icons: cells (probiotics), a wheat sprig (prebiotic fiber), a pie broken apart (enzymes). No pill shapes, since the product is a powder.
 - Waitlist form: posts to Formspree (https://formspree.io/f/xppwgeba) with fetch, from the form's own action attribute. The same attributes make it work without JavaScript. Hidden subject line "New Formul8 waitlist signup" and a hidden spam-trap field. Formspree's errors are read, so a rejected email shows "That email looks off. Mind checking it?" and anything else shows the failure line.
+
+## 12. Direction change: the simple site (supersedes sections 4, 7 and 8)
+
+The owner asked for a simple, easy-to-navigate site that converts, with no interactive scrolling. Retired: the scroll-scrubbed video hero and its caption bands, the vine, the stir interaction, the fixed background layer, the dark doubt panel, all entrance animation. The scrolling version is kept in git at commit 85b7f41.
+
+Now: a white-kitchen hero image with the owner's real product jar on the counter (the supplied photo, cut out and placed, not regenerated), the signup form right in the hero, then plain light green (#E3EEDA) everywhere else. Section order: hero, the doubt (four short cards), what is inside (with the jar), the ritual (three step photos), questions, the second signup form, footer.
+
+Copy is unchanged except for what the product label now supplies: "30 servings per container." appears under the hero form and as a new question ("How many servings are in a container?"). Palette, type trio, and every other line of copy stand as written above.

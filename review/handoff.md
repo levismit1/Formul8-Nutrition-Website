@@ -1,42 +1,25 @@
 # Formul8 build handoff
 
-Branch: claude/clever-babbage-gm33th. Site folder: formul8/. Design package with all copy: review/design-package.md. Skill: 10k-websites/.
+Branch: claude/clever-babbage-gm33th. Site folder: formul8/. Copy and decisions: review/design-package.md (section 12 describes the current simple design). Skill folder: 10k-websites/ (its cinematic scroll pipeline is no longer used for this site).
 
-## Approved assets waiting on download (Higgsfield, all approved by the owner)
+## Current state
 
-Host to allow in the cloud environment's Network access: d8j0ntlcm91z4.cloudfront.net
+Simple static site: formul8/index.html, assets/site.css, assets/site.js (forms, FAQ, phone menu only), self-hosted fonts, webp logos, product.webp, hero-kitchen.jpg (desktop) and hero-kitchen-mobile.jpg (phone), three step photos. About 620 KB for everything on desktop. No video.
 
-| Asset | Job id | URL |
-|---|---|---|
-| Hero start image (2688x1520) | e0e0050a-3cf4-4822-aaa4-a727a8a37e59 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_195527_e0e0050a-3cf4-4822-aaa4-a727a8a37e59.png |
-| Hero video, Kling v3.0 pro, 1920x1080, 6s, silent | 347a7f60-465b-4f04-aeb7-a17f77af6465 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_195831_347a7f60-465b-4f04-aeb7-a17f77af6465.mp4 |
-| Step 1, scoop (2048x1360) | f36aeab7-bed8-4fc7-acf3-c032922d2302 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_200431_f36aeab7-bed8-4fc7-acf3-c032922d2302.png |
-| Step 2, stir (2048x1360) | bfd8517a-3661-4c0a-befd-a18ad85371b0 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_200431_bfd8517a-3661-4c0a-befd-a18ad85371b0.png |
-| Step 3, sip (2048x1360) | 08ea579a-6902-486b-b812-a11718382e41 | https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_200430_08ea579a-6902-486b-b812-a11718382e41.png |
+Hero image: a generated white kitchen (Higgsfield job cdd678c3-319f-43e8-8f7a-69a2b0d7f121, https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_212826_cdd678c3-319f-43e8-8f7a-69a2b0d7f121.png) with the owner's own product photo placed on the counter. Source photo: review/product-original.jpg. Cutout: review/product-cutout.png. Placement script: review/tools/compose-hero.py (usage: python compose-hero.py CENTER_X BASE_Y SCALE OUTPUT; the final used 1960 1335 0.72). Raw kitchen and composite are gitignored under review/kitchen/.
 
-Credits left on the account: 77.
+Signup: both forms post to https://formspree.io/f/xppwgeba (hidden source field says hero or bottom). Formspree may ask to confirm the first submission.
 
-## Status (updated)
+Verified: text over the hero passes (worst small text 6.5:1), both forms (mocked), phone menu, FAQ, keyboard order, no sideways scroll from 320 to 1920 px, copy gate. Everything was tested in headless Chromium only.
 
-DONE: all five files downloaded (network host allowed), inspected, processed. hero-scrub.mp4 (5.1 MB, -g 8, crf 26), hero-poster.jpg, hero-ending.jpg and the three step stills are in formul8/assets/. VIDEO_BYTES is set. Worst-frame legibility audit passes on every band at 1024, 1280, 1440 and 1920 wide (worst 4.78:1) and on the static phone hero (worst 5.7:1). Flick test, phone, tablet rotation, reduced motion (live both ways), video-missing and form tests all pass on the real assets. Copy gate passes.
+## Open
 
-OPEN: (1) Owner sends one real test signup after launch (Formspree may ask to confirm the first submission). (2) Legal read of the health sentences. (3) Hosting only when the owner says ready.
-
-HERO VIDEO: the owner chose the second take (Kling pro job 48b56484-a49a-49f7-9202-afef6cbcf41b, fresh green leaf ending, 9 credits, https://d8j0ntlcm91z4.cloudfront.net/user_3AhUWJbM1wOEFFwglyhxjC5xBlD/hf_20261002_205718_48b56484-a49a-49f7-9202-afef6cbcf41b.mp4). It is live in formul8/assets (4.6 MB). The first take (golden-brown leaf ending) is kept in git history at commit 6fa0e79 and as review/hero/raw-v1.mp4 locally. The legibility audit passes on the second take at 1024, 1280, 1440 and 1920 wide (worst 5.09:1) and on the static phone hero (worst 5.82:1).
-
-## Original next steps (all done except the open items above)
-
-1. Save raws OUTSIDE formul8/ (review/hero/ and review/stills/).
-2. Scrub encode per 10k-websites/references/ffmpeg-recipes.md (-g 8). Poster = first frame, ending = last frame.
-3. Stills: scale to 1920 wide, one JPEG pass, save as formul8/assets/step-scoop.jpg, step-stir.jpg, step-sip.jpg.
-4. Set CONFIG.VIDEO_BYTES in formul8/assets/site.js to the real byte size of hero-scrub.mp4.
-5. Worst-frame legibility audit on every hero band (3.5:1 minimum), tune scrims and the band ranges.
-6. Re-run the flick test, the phone and reduced-motion checks, and the copy gate on the real build.
-7. Check the ending frame with the header mocked over it, at wide and short windows.
-8. Hosting and going live happen only when the owner says they are ready.
+1. Owner reviews review/previews/ and gives notes.
+2. Legal read of the health sentences before launch.
+3. Hosting only when the owner says ready (Phase 10). After launch: one real test signup, real-phone test, speed measured on the live URL.
+4. Higgsfield credits left: check with the balance tool (about 74).
 
 ## Notes
 
-- The headless test browser cannot decode H.264. For testing only, serve a VP9 copy under the same URL. Never ship it.
-- The waitlist form posts to https://formspree.io/f/xppwgeba. Ask the owner to send one real test signup after launch.
-- Imagery is generated now. The owner will swap in real photos later, so the site carries no AI disclosure line.
+- The headless test browser cannot decode H.264. Not relevant now that the site has no video.
+- The scrolling cinematic version (hero video, vine, stir) is in git history at commit 85b7f41, with its video assets.
