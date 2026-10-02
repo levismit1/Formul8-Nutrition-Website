@@ -8,10 +8,7 @@
 const CONFIG = {
   VIDEO_URL: 'assets/hero-scrub.mp4',
   VIDEO_BYTES: 0,                      // real byte size of hero-scrub.mp4, the fallback when Content-Length is missing
-  POSTER_URL: 'assets/hero-poster.jpg',
-  FORM_MODE: 'demo',                   // 'demo' (shows success, sends nowhere) | 'mailto' | 'endpoint'
-  FORM_MAILTO: '',                     // used when FORM_MODE is 'mailto'
-  FORM_ENDPOINT: ''                    // used when FORM_MODE is 'endpoint' (a form service URL)
+  POSTER_URL: 'assets/hero-poster.jpg'
 };
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -413,50 +410,72 @@ const emailInput = $('#wlEmail');
 const msg = $('#wlMsg');
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-async function submitEmail(address) {
-  if (CONFIG.FORM_MODE === 'mailto' && CONFIG.FORM_MAILTO) {
-    const subject = encodeURIComponent('Formul8 waitlist');
-    const body = encodeURIComponent('Please add me to the Formul8 waitlist: ' + address);
-    location.href = `mailto:${CONFIG.FORM_MAILTO}?subject=${subject}&body=${body}`;
-    return;
-  }
-  if (CONFIG.FORM_MODE === 'endpoint' && CONFIG.FORM_ENDPOINT) {
-    const res = await fetch(CONFIG.FORM_ENDPOINT, {
+/* The endpoint lives in the form's action attribute (one source of truth).
+   Formspree answers JSON when asked: 200 on success, 4xx with { errors: [{ field, message }] } otherwise. */
+const COPY = {
+  badEmail: 'That email looks off. Mind checking it?',
+  ok: 'You are on the list. We will email you when Formul8 is ready.',
+  fail: 'Something went wrong on our side. Please try again in a moment.'
+};
+const SEND_TIMEOUT_MS = 12000;
+let sending = false;
+
+function showMsg(kind, text) {
+  msg.className = kind ? 'msg ' + kind : 'msg';
+  msg.textContent = text;
+}
+function showBadEmail() {
+  emailInput.setAttribute('aria-invalid', 'true');
+  showMsg('err', COPY.badEmail);
+  emailInput.focus();
+}
+function showSent() {
+  form.classList.add('sent');
+  showMsg('ok', COPY.ok);
+}
+async function sendToFormspree() {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), SEND_TIMEOUT_MS);
+  try {
+    const res = await fetch(form.action, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ email: address })
+      body: new FormData(form),                  // email, the subject line, and the spam trap
+      headers: { Accept: 'application/json' },
+      signal: ctrl.signal
     });
-    if (!res.ok) throw new Error('form ' + res.status);
-    return;
+    if (res.ok) return { ok: true };
+    let data = null;
+    try { data = await res.json(); } catch (_) { /* not JSON, fall through to the generic error */ }
+    const emailProblem = data && Array.isArray(data.errors) && data.errors.some(x => x.field === 'email');
+    return { ok: false, emailProblem };
+  } finally {
+    clearTimeout(timer);
   }
-  console.warn('Formul8 form is in demo mode: the address was not sent anywhere.');
-  await new Promise(r => setTimeout(r, 350));
 }
 form.addEventListener('submit', async e => {
   e.preventDefault();
+  if (sending) return;
   const value = emailInput.value.trim();
-  if (!EMAIL_RE.test(value)) {
-    emailInput.setAttribute('aria-invalid', 'true');
-    msg.className = 'msg err';
-    msg.textContent = 'That email looks off. Mind checking it?';
-    emailInput.focus();
-    return;
-  }
+  emailInput.value = value;
+  if (!EMAIL_RE.test(value)) { showBadEmail(); return; }
   emailInput.removeAttribute('aria-invalid');
-  msg.className = 'msg';
-  msg.textContent = '';
+  showMsg('', '');
+  if (form.elements._gotcha && form.elements._gotcha.value) { showSent(); return; }   // a bot filled the trap: look happy, send nothing
   const btn = $('button[type="submit"]', form);
+  sending = true;
   btn.disabled = true;
+  form.setAttribute('aria-busy', 'true');
   try {
-    await submitEmail(value);
-    form.classList.add('sent');
-    msg.className = 'msg ok';
-    msg.textContent = 'You are on the list. We will email you when Formul8 is ready.';
+    const result = await sendToFormspree();
+    if (result.ok) showSent();
+    else if (result.emailProblem) showBadEmail();
+    else showMsg('err', COPY.fail);
   } catch (err) {
-    msg.className = 'msg err';
-    msg.textContent = 'Something went wrong on our side. Please try again in a moment.';
+    showMsg('err', COPY.fail);                   // offline, timed out, or blocked
   } finally {
+    sending = false;
     btn.disabled = false;
+    form.removeAttribute('aria-busy');
   }
 });
 emailInput.addEventListener('input', () => { if (emailInput.getAttribute('aria-invalid')) emailInput.removeAttribute('aria-invalid'); });

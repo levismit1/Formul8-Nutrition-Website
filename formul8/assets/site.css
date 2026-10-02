@@ -274,6 +274,7 @@ section.doubt,section.ritual,section.inside,section.faq,section.waitlist{positio
 .field input::placeholder{color:#667663}
 .field input:hover{border-color:var(--forest)}
 .field input[aria-invalid="true"]{border-color:#8A3B2A}
+.hp{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
 .msg{min-height:1.6em;margin:12px 6px 0;font:500 .98rem/1.45 var(--f-body)}
 .msg.ok{color:var(--forest)}
 .msg.err{color:#8A3B2A}

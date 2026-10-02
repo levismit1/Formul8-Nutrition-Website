@@ -213,12 +213,15 @@
       <div class="card reveal">
         <h2 id="wl-h">Be first in line.</h2>
         <p class="wl-lede">Leave your email and we will tell you the day Formul8 is ready.</p>
-        <form id="wlForm" novalidate>
+        <!-- Signups go to Formspree. action + method are the no-JavaScript fallback; site.js sends it with fetch instead. -->
+        <form id="wlForm" action="https://formspree.io/f/xppwgeba" method="POST" novalidate>
           <label for="wlEmail">Your email</label>
           <div class="field">
             <input id="wlEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required aria-describedby="wlMsg">
             <button class="btn" type="submit">Join the waitlist</button>
           </div>
+          <input type="hidden" name="_subject" value="New Formul8 waitlist signup">
+          <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
           <p class="msg" id="wlMsg" role="status" aria-live="polite"></p>
         </form>
       </div>

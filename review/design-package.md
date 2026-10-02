@@ -156,3 +156,4 @@ Every viewer-facing line above ships verbatim. The built page must pass the Phas
 - Form failure state: "Something went wrong on our side. Please try again in a moment."
 - The closing 8 sits beside the waitlist card (not behind it) and grows the logo's leaf once drawn.
 - Section D icons: cells (probiotics), a wheat sprig (prebiotic fiber), a pie broken apart (enzymes). No pill shapes, since the product is a powder.
+- Waitlist form: posts to Formspree (https://formspree.io/f/xppwgeba) with fetch, from the form's own action attribute. The same attributes make it work without JavaScript. Hidden subject line "New Formul8 waitlist signup" and a hidden spam-trap field. Formspree's errors are read, so a rejected email shows "That email looks off. Mind checking it?" and anything else shows the failure line.
