@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { @apply bg-warm text-forest font-sans antialiased; overflow-x: clip; }
+:focus-visible { outline: 2px solid #A9BDA8; outline-offset: 3px; border-radius: 6px; }
+
+@layer components {
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.2em] text-natural; }
+  .on-dark .eyebrow { @apply text-sage; }
+  .container-x { @apply mx-auto w-full max-w-6xl px-5 sm:px-8; }
+  .section { @apply py-20 sm:py-28; }
+  .h-display { @apply font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl; }
+  .h-section { @apply font-display text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl; }
+}
+
+/* Entrance animations: only hidden when JS is active and motion is allowed */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
+  @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+  .float { animation: floaty 7s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition-duration: 0.01ms !important; }
+}
